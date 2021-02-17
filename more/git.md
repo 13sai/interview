@@ -99,7 +99,7 @@ git push -f
 
 #### revert
 
-git revert用于反转提交,执行revert命令时要求工作树必须是干净的。git revert用一个新提交来消除一个历史提交所做的任何修改。revert 之后你的本地代码会回滚到指定的历史版本,这时你再 git push 既可以把线上的代码更新。
+git revert用于反转提交。执行revert命令时要求工作树必须是干净的，git revert用一个新提交来消除一个历史提交所做的任何修改。revert 之后你的本地代码会回滚到指定的历史版本，这时你再 git push 就可以把线上的代码更新。
 
 
 

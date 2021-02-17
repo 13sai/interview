@@ -30,7 +30,6 @@ server {
     listen       80;
     server_name  nginx-t.com;
 
-
     location / {
         proxy_next_upstream error http_503;
         proxy_pass http://13sai;

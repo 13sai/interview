@@ -45,6 +45,6 @@ catch_workers_output = Yes  #将worker的标准输出和错误输出重定向到
 
 ## worker进程、master进程详解
 
-master只是负责监听管理工作，并不是很多人认为的把客户端发来的请求分给worker进程处理，而是由**worker进程负责客户端的请求监听和处理**。这和nginx是不一样的，需要注意一下。
+master只是负责监听管理工作，并不是很多人认为的把客户端发来的请求分给worker进程处理，而是由**worker进程负责客户端的请求监听和处理**。
 
 一旦kill掉worker进程后，会重启一个新的worker进程。因此客户端请求肯定会得到响应处理。master进程负责监听子进程的状态，子进程挂掉之后，会发信号给master进程，然后master进程重新启一个新的worker进程。

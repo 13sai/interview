@@ -1,18 +1,16 @@
 
-
-
 ## 主模块
 
 
 ```
 # 配置用户或者组，默认为nobody nobody。
-#user www www;  
+user www www;  
 
  #Nginx开启的worker进程数，建议为CPU的核数
-#worker_processes 2; 
+worker_processes 2; 
 
 #指定nginx进程运行文件存放地址
-#pid /nginx/pid/nginx.pid;
+pid /nginx/pid/nginx.pid;
 
 #指定日志路径，级别。这个设置可以放入全局块、http块、server块，级别以此为：debug|info|notice|warn|error|crit|alert|emerg
 error_log log/error.log debug; 
@@ -35,7 +33,7 @@ events {
     multi_accept on;
     
     #事件驱动模型，select|poll|kqueue|epoll|resig|/dev/poll|eventport，不建议设置，nginx会自行选择
-    #use epoll;
+    use epoll;
     
     #最大连接数，默认为512
     worker_connections  1024;
@@ -52,9 +50,8 @@ http {
     # 默认文件类型，默认为text/plain
     default_type  application/octet-stream; 
     
-    #取消服务日志 
-    #access_log off; 
-
+    #取消访问日志 
+    access_log off; 
     
     #允许sendfile方式传输文件，默认为off，可以在http块，server块，location块。
     sendfile on;   
@@ -66,15 +63,13 @@ http {
     keepalive_timeout 65;  
     
     #开启gzip资源压缩
-    gzip  on; 
-    
+    gzip  on;  
 
-    # 负载均衡，详细可看了一篇文章：http://blog.13sai.com/essay/203
+    # 负载均衡
     upstream blog {   
         server 192.167.20.19:8081;
         server 192.168.10.121:8080 weight=5;
     }
-
     
     #设定请求缓冲
     client_header_buffer_size    128k;
@@ -93,8 +88,8 @@ http {
         #监听地址
         server_name  blog.13sai.com;  
         
-        #设定日志格式
-        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+        #自定义日志格式
+        log_format  main '$remote_addr - $remote_user [$time_local] "$request" '
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
                       
@@ -105,7 +100,6 @@ http {
         
         # 定义错误提示页面
         error_page   500 502 503 504 /50x.html;
-        
         
         location /static/ {
             #root与alias主要区别在于nginx如何解释location后面的uri，这会使两者分别以不同的方式将请求映射到服务器文件上。
@@ -198,7 +192,8 @@ return URL;
 410(Gone)、
 411(Length Required)、
 413(Request Entity Too Large)、
-416(Requested Range Not Satisfiable)、 500(Internal Server Error)、
+416(Requested Range Not Satisfiable)、 
+500(Internal Server Error)、
 501(Not Implemented)、
 502(Bad Gateway)、 
 503(Service Unavailable)
@@ -214,15 +209,12 @@ location ~ .*\.(sh|bash)?$ {
 #### rewrite
 
 ```
-
 执行顺序：
 1. 执行server块的rewrite指令(这里的块指的是server关键字后{}包围的区域，其它xx块类似)
 2. 执行location匹配
 3. 执行选定的location中的rewrite指令
 如果其中某步URI被重写，则重新循环执行1-3，直到找到真实存在的文件
-
 如果循环超过10次，则返回500 Internal Server Error错误
-
 
 语法:rewrite regex replacement [flag]; 
 默认值:—
@@ -241,12 +233,12 @@ flag标记:rewrite支持的flag标记
 if条件(conditon)可以是如下任何内容:
 
 一个变量名；false如果这个变量是空字符串或者以0开始的字符串；
-使用= ,!= 比较的一个变量和字符串
-是用~， ~*与正则表达式匹配的变量，如果这个正则表达式中包含}，;则整个表达式需要用" 或' 包围
-使用-f ，!-f 检查一个文件是否存在
-使用-d, !-d 检查一个目录是否存在
-使用-e ，!-e 检查一个文件、目录、符号链接是否存在
-使用-x ， !-x 检查一个文件是否可执行
+使用=,!= 比较的一个变量和字符串
+是用~,~*与正则表达式匹配的变量，如果这个正则表达式中包含}，;则整个表达式需要用" 或' 包围
+使用-f,!-f 检查一个文件是否存在
+使用-d,!-d 检查一个目录是否存在
+使用-e,!-e 检查一个文件、目录、符号链接是否存在
+使用-x,!-x 检查一个文件是否可执行
 ```
 
 ###### if实例
@@ -273,18 +265,15 @@ if ($invalid_referer) {
 ###### last & break
 
 ```
-（1）last 和 break 当出现在location 之外时，两者的作用是一致的没有任何差异。
-注意一点就是，他们会跳过所有的在他们之后的rewrite 模块中的指令，去选择自己匹配的location
+（1）last 和 break 当出现在location 之外时，两者的作用是一致的没有任何差异。需要注意的一点就是，他们会跳过所有的在他们之后的rewrite 模块中的指令，去选择自己匹配的location
 （2）last 和 break 当出现在location 内部时，两者就存在了差异
 -- last: 使用了last 指令，rewrite 后会跳出location 作用域，重新开始再走一次刚刚的行为
 -- break: 使用了break 指令，rewrite后不会跳出location 作用域。它的生命也在这个location中终结。
 
 解释通俗易懂：
 
-last：
-        重新将rewrite后的地址在server标签中执行
-break：
-        将rewrite后的地址在当前location标签中执行
+last：重新将rewrite后的地址在server标签中执行
+break：将rewrite后的地址在当前location标签中执行
 ```
 
 
@@ -294,7 +283,8 @@ permanent: 永久性重定向。请求日志中的状态码为301
 redirect:临时重定向。请求日志中的状态码为302
 ```
 
-从实现功能的角度上去看，permanent 和 redirect 是一样的。不存在好坏。也不存在什么性能上的问题。但是对seo会有影响，这里要根据需要做出选择
+从实现功能的角度上去看，permanent 和 redirect 是一样的。不存在好坏。也不存在什么性能上的问题。但是对seo会有影响，这里要根据需要做出选择。
+
 在 permanent 和 redirect  中提到了 状态码 301 和 302。 
 
 
@@ -324,7 +314,7 @@ nginx作为反向代理服务器的时候：
 
 #### 限制每个IP的并发连接数
 
-demo:定义一个叫“two”的记录区，总容量为 10M（超过大小将请求失败，以变量 $binary_remote_addr 作为会话的判断基准（即一个地址一个会话）。 限制 /download/ 目录下，一个会话只能进行一个连接。 简单点，就是限制 /download/ 目录下，一个IP只能发起一个连接，多过一个，一律503。
+定义一个叫“two”的记录区，总容量为 10M（超过大小将请求失败，以变量 $binary_remote_addr 作为会话的判断基准（即一个地址一个会话）。 限制 /download/ 目录下，一个会话只能进行一个连接。 简单点，就是限制 /download/ 目录下，一个IP只能发起一个连接，多过一个，一律503。
 
 ```
 http {
@@ -344,7 +334,7 @@ http {
 
 #### 限流
 
-demo:定义一个叫“one”的记录区，占用空间大小为10m（超过大小将请求失败），平均处理的请求频率不能超过每秒一次，也可以设置分钟速率
+定义一个叫“one”的记录区，占用空间大小为10m（超过大小将请求失败），平均处理的请求频率不能超过每秒一次，也可以设置分钟速率
 
 ```
 http {

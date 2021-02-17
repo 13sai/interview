@@ -1,4 +1,4 @@
-Compose是 Docker 的服务编排工具，主要用来构建基于Docker的复杂应用Compose 通过一个配置文件来管理多个 Docker 容器，非常适合组合使用多个容器进行开发的场景。
+Compose是 Docker 的服务编排工具，主要用来构建基于Docker的复杂应用。Compose 通过一个配置文件来管理多个 Docker 容器，非常适合组合使用多个容器进行开发的场景。
 
 Compose 中有两个重要的概念：
 
@@ -33,7 +33,7 @@ Compose 中有两个重要的概念：
 
 重启已停止的 Compose 应用。
 
-如果用户在停止该应用后对其进行了变更，那么变更的内容不会反映在重启后的应用中，这时需要重新部署应用使变更生效。
+如果用户在停止该应用后对其进行了变更，那么变更的内容不会反映在重启后的应用中，这时需要重新部署应用使变更生效。这是需要注意的点。
 
 #### 5) docker-compose ps
 
@@ -49,29 +49,30 @@ Compose 中有两个重要的概念：
 
 # 安装docker
 
-```
+```dockerfile
 curl -sSL https://get.daocloud.io/docker | sh
 
 ---
 
 curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+
 docker version
 ```
 
 # 安装docker-compose
 
-```
+```dockerfile
 curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 chmod +x /usr/local/bin/docker-compose
 docker-compose version
 ```
 
+
+
 # docker-compose.yml 文件
 
-先来看一份 docker-compose.yml 文件，不用管这是干嘛的，只是有个格式方便后文解说：
-
-
+先来看一份 docker-compose.yml 文件：
 
 ```ruby
 version: '2'
@@ -107,7 +108,7 @@ networks:
   front-tier:
     driver: bridge
   back-tier:
-driver: bridge
+		driver: bridge
 ```
 
 可以看到一份标准配置文件应该包含 version、services、networks 三大部分，其中最关键的就是 services 和 networks 两个部分，下面先来看 services 的书写规则。
