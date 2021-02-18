@@ -1,7 +1,5 @@
 PHP-FPM(PHP FastCGI Process Manager)：PHP FastCGI 进程管理器，用于管理PHP 进程池的软件，用于接受web服务器的请求。
 
-
-
 主要配置说明：
 
 ```
