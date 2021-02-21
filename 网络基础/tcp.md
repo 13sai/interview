@@ -4,8 +4,6 @@
 
 https://juejin.cn/post/6844903834708344840
 
-
-
 ## 三次握手
 
 
@@ -77,8 +75,6 @@ https://juejin.cn/post/6844903834708344840
 
 而对于第三次的话，此时客户端已经处于 established 状态，也就是说，对于客户端来说，他已经建立起连接了，并且也已经知道服务器的接收、发送能力是正常的了，所以能携带数据页没啥毛病。
 
-
-
 ## 四次挥手
 
 
@@ -110,26 +106,20 @@ https://juejin.cn/post/6844903834708344840
 这里我给出每个状态所包含的含义，有兴趣的可以看看。
 
 > LISTEN - 侦听来自远方TCP端口的连接请求；
-
 > SYN-SENT -在发送连接请求后等待匹配的连接请求；
-
 > SYN-RECEIVED - 在收到和发送一个连接请求后等待对连接请求的确认；
-
 > ESTABLISHED- 代表一个打开的连接，数据可以传送给用户；
-
 > FIN-WAIT-1 - 等待远程TCP的连接中断请求，或先前的连接中断请求的确认；
-
 > FIN-WAIT-2 - 从远程TCP等待连接中断请求；
-
 > CLOSE-WAIT - 等待从本地用户发来的连接中断请求；
-
 > CLOSING -等待远程TCP对连接中断的确认；
-
 > LAST-ACK - 等待原来发向远程TCP的连接中断请求的确认；
-
 > TIME-WAIT -等待足够的时间以确保远程TCP接收到连接中断请求的确认；
-
 > CLOSED - 没有任何连接状态；
 
+## SYN攻击
 
+三次握手过程中，Server发送SYN-ACK之后，收到Client的ACK之前的TCP连接称为半连接（half-open connect），此时Server处于SYN_RCVD状态，当收到ACK后，Server转入ESTABLISHED状态。SYN攻击就是Client在短时间内伪造大量不存在的IP地址，并向Server不断地发送SYN包，Server回复确认包，并等待Client的确认，由于源地址是不存在的，因此，Server需要不断重发直至超时，这些伪造的SYN包将产时间占用未连接队列，导致正常的SYN请求因为队列满而被丢弃，从而引起网络堵塞甚至系统瘫痪。SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接状态且源IP地址是随机的，则可以断定遭到SYN攻击了，使用如下命令可以让之现行：
+
+> netstat -nap | grep SYN_RECV
 
