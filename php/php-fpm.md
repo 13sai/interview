@@ -25,7 +25,7 @@ catch_workers_output = Yes  #将worker的标准输出和错误输出重定向到
 
 配置项要求：pm.max_children> 0 必须配置，且只有这一个参数生效
 
-优缺点：如果配置成static，只需要考虑max_children的数量，数量取决于cpu的个数和应用的响应时间
+优缺点：如果配置成static，只需要考虑max_children的数量，数量取决于cpu的个数和应用的响应时间，运行后省去了创建worker的时间。
 
 2. pm=dynamic：php-fpm启动时，会初始启动一些worker，初始启动worker数决定于pm.max_children的值。在运行过程中动态调整worker数量，worker的数量受限于pm.max_children配置，同时受限全局配置process.max。
 
@@ -39,7 +39,7 @@ catch_workers_output = Yes  #将worker的标准输出和错误输出重定向到
 启动的最大worker数决定于pm.max_children的值，同时受限全局配置process.max。1秒定时器作用，如果空闲worker时间超过pm.process_idle_timeout的值（默认值为10s），则关闭该worker。这个机制可能会关闭所有的worker。
 
 优点：按流量需求创建，不浪费系统资源
-缺点：由于php-fpm是短连接的，所以每次请求都会先建立连接，频繁的创建worker会浪费系统开销。，所以，在大流量的系统上，master进程会变得繁忙，占用系统cpu资源，不适合大流量环境的部署。
+缺点：由于php-fpm是短连接的，所以每次请求都会先建立连接，频繁的创建worker会浪费系统开销。所以，在大流量的系统上，master进程会变得繁忙，占用系统cpu资源，不适合大流量环境的部署，可使用static。
 
 ## worker进程、master进程详解
 
