@@ -47,7 +47,7 @@ Paxos是第一个被证明的共识算法，原理基于两阶段提交并进行
 - 一个或多个节点可以提出提议
 - 系统针对所有提案中的某个提案必须达成一致
 - 最多只能对一个确定的提案达成一致
-- 只要超过半数的节点存活且可互相通信，整个系统一定能达成一致状态。
+- 只要超过半数的节点存活且可互相通信，整个系统一定能达成一致状态
 
 
 
@@ -75,8 +75,8 @@ Paxos是第一个被证明的共识算法，原理基于两阶段提交并进行
 
 整个过程（一个事务或一个Round）**分为两个阶段：**
 
-- **phase1（准备阶段）** a)Proposer向超过半数（n/2+1）Acceptor发起prepare消息(发送编号) b)如果prepare符合协议规则Acceptor回复promise消息，否则拒绝
-- **phase2（决议阶段或投票阶段）** a)如果超过半数Acceptor回复promise，Proposer向Acceptor发送accept消息(此时包含真实的值) b)Acceptor检查accept消息是否符合规则，消息符合则批准accept请求
+- **phase1（准备阶段）** a) Proposer向超过半数（n/2+1）Acceptor发起prepare消息(发送编号) b)如果prepare符合协议规则Acceptor回复promise消息，否则拒绝
+- **phase2（决议阶段或投票阶段）** a) 如果超过半数Acceptor回复promise，Proposer向Acceptor发送accept消息(此时包含真实的值) b)Acceptor检查accept消息是否符合规则，消息符合则批准accept请求
 
 根据上述过程当一个proposer发现存在编号更大的提案时将终止提案。这意味着提出一个编号更大的提案会终止之前的提案过程。有可能陷入活锁，违背了Progress的要求。这种情况下的解决方案是选举出一个leader，仅允许leader提出提案。注意一个learner可能兼任proposer。
 

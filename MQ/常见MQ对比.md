@@ -5,8 +5,6 @@
 - kafka
 - Activemq
 
-
-
 ### MQ对比
 
 | **MQ**   | **描述**                                                     |
