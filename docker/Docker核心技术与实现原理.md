@@ -2,8 +2,6 @@ From: [Docker 核心技术与实现原理](https://draveness.me/docker/)
 
 # Docker 核心技术与实现原理
 
-2017-11-30 [Docker](https://draveness.me/tags/docker) [namespaces](https://draveness.me/tags/namespaces) [cgroups](https://draveness.me/tags/cgroups) [unionfs](https://draveness.me/tags/unionfs) [aufs](https://draveness.me/tags/aufs)
-
 提到虚拟化技术，我们首先想到的一定是 Docker，经过四年的快速发展 Docker 已经成为了很多公司的标配，也不再是一个只能在开发阶段使用的玩具了。作为在生产环境中广泛应用的产品，Docker 有着非常成熟的社区以及大量的使用者，代码库中的内容也变得非常庞大。
 
 ![docker-logo](https://img.draveness.me/2017-11-30-docker-logo.png)
