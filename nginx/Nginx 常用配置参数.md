@@ -15,6 +15,9 @@ pid /nginx/pid/nginx.pid;
 #指定日志路径，级别。这个设置可以放入全局块、http块、server块，级别以此为：debug|info|notice|warn|error|crit|alert|emerg
 error_log log/error.log debug; 
 
+#进程最大可打开文件数
+worker_rlimit_nofile 65535;
+
 #可以在任意地方使用include指令实现配置文件的包含，类似于apache中的include方法，可减少主配置文件长度。
 include vhosts/*.conf;
 ```
